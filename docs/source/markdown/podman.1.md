@@ -61,9 +61,11 @@ Print usage statement
 
 #### **--hooks-dir**=*path*
 
-Each `*.json` file in the path configures a hook for Podman containers.  For more details on the syntax of the JSON files and the semantics of hook injection, see `oci-hooks(5)`.  Podman and libpod currently support both the 1.0.0 and 0.1.0 hook schemas, although the 0.1.0 schema is deprecated.
+Each `*.json` file in the path configures a hook for Podman containers.  For more details on the syntax of the JSON files and the semantics of hook injection, see **[oci-hooks(5)](https://github.com/containers/container-libs/blob/main/common/pkg/hooks/docs/oci-hooks.5.md)**.  Podman and libpod currently support both the 1.0.0 and 0.1.0 hook schemas, although the 0.1.0 schema is deprecated.
 
 This option may be set multiple times; paths from later options have higher precedence (`oci-hooks(5)` discusses directory precedence).
+
+Hook stages come from the [OCI Runtime Specification](https://github.com/opencontainers/runtime-spec/blob/main/config.md#posix-platform-hooks) (`prestart`, `createRuntime`, `createContainer`, `startContainer`, `poststart`, `poststop`).  The stage name you put in a hook's `stages` array is the OCI stage at which that hook runs (for example `createContainer` runs after the container namespace is created but before the process starts).
 
 For the annotation conditions, libpod uses any annotations set in the generated OCI configuration.
 
@@ -71,7 +73,7 @@ For the bind-mount conditions, only mounts explicitly requested by the caller vi
 
 If `--hooks-dir` is unset for root callers, Podman and libpod currently default to `/usr/share/containers/oci/hooks.d` and `/etc/containers/oci/hooks.d` in order of increasing precedence.  Using these defaults is deprecated. Migrate to explicitly setting `--hooks-dir`.
 
-Podman and libpod currently support an additional `precreate` state which is called before the runtime's `create` operation.  Unlike the other stages, which receive the container state on their standard input, `precreate` hooks receive the proposed runtime configuration on their standard input.  They may alter that configuration as they see fit, and write the altered form to their standard output.
+Podman and libpod currently support an additional `precreate` stage which is called before the runtime's `create` operation.  Unlike the other stages, which receive the container state on their standard input, `precreate` hooks receive the proposed runtime configuration on their standard input.  They may alter that configuration as they see fit, and write the altered form to their standard output.
 
 **WARNING**: the `precreate` hook allows powerful changes to occur, such as adding additional mounts to the runtime configuration.  That power also makes it easy to break things.  Before reporting libpod errors, try running a container with `precreate` hooks disabled to see if the problem is due to one of the hooks.
 

@@ -83,7 +83,7 @@ func (s *APIServer) registerContainersHandlers(r *mux.Router) error {
 	//        - `id=<ID>` a container's ID
 	//        - `is-task`=(`true` or `false`)
 	//        - `label`=(`key` or `"key=value"`) of a container label
-	//        - `name=<name>` a container's name
+	//        - `name=<name>` a container's name (accepts regex; same as `podman ps --filter name=`)
 	//        - `network`=(`<network id>` or `<network name>`)
 	//        - `publish`=(`<port>[/<proto>]` or `<startport-endport>/[<proto>]`)
 	//        - `since`=(`<container id>` or `<container name>`)
@@ -825,7 +825,7 @@ func (s *APIServer) registerContainersHandlers(r *mux.Router) error {
 	//        - `id=<ID>` a container's ID
 	//        - `is-task`=(`true` or `false`)
 	//        - `label`=(`key` or `"key=value"`) of a container label
-	//        - `name=<name>` a container's name
+	//        - `name=<name>` a container's name (accepts regex; same as `podman ps --filter name=`)
 	//        - `network`=(`<network id>` or `<network name>`)
 	//        - `pod`=(`<pod id>` or `<pod name>`)
 	//        - `publish`=(`<port>[/<proto>]` or `<startport-endport>/[<proto>]`)
